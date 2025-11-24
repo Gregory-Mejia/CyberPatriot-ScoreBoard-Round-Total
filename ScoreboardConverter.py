@@ -8,11 +8,12 @@
 # -- Libraries -- #
 
 import openpyxl
+from typing import cast
 
 # -- Functions -- #
 
 
-def forceSpreadsheetFileExtension(string: str) -> str:
+def forceSpreadSheetFileExtension(string: str) -> str:
     """
         Force parameter 'string' to have .xlsx at the end of its name.
         Used to ensure a valid file type from the file extension.
@@ -27,9 +28,29 @@ def forceSpreadsheetFileExtension(string: str) -> str:
         return string + ".xlsx"
 
 
-def createSpreadSheet(file_name: str = "untitled.xlsx"):
+def createSpreadSheet(sheet_title: str, file_name: str = "untitled.xlsx"):
     """
         Creates a new spreadsheet with the given file_name.
         Styled to be like the CyberPatriot's default sheet.
     """
-    file_name = forceSpreadsheetFileExtension(file_name)
+    # Ignore all the MemberAccess and Subscript warnings from openpyxl
+    # Create a new workbook and set the name to a valid version
+    file_name = forceSpreadSheetFileExtension(file_name)
+    workbook = openpyxl.Workbook()
+
+    # Setting the main spreadsheet sheet to the main one and giving it a title
+    sheet = workbook.active
+    sheet.title = sheet_title
+
+    # Headers 'n Stuff (boringg...)
+    sheet["A10"] = "Team Number"
+    sheet["B10"] = "Location"
+    sheet["C10"] = "Division"
+    sheet["D10"] = "Image Score"
+    sheet["E10"] = "Adjustment"
+    sheet["F10"] = "Quiz"
+    sheet["G10"] = "PT"
+    sheet["H10"] = "Total"
+
+    # Save to the file to ensure every change is reflected in a new file
+    workbook.save(file_name)

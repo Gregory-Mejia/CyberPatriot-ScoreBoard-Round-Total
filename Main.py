@@ -14,7 +14,7 @@ from typing import TypeAlias
 
 ShtEry: TypeAlias = tuple[str, str, str, int, int, int, float, float]
 
-r1_score_path = 'CP18_RD1_Final_Scores.xlsx'
+r1_score_path = r"Spreadsheets\CP18_RD1_Final_Scores.xlsx"
 r1_scores = openpyxl.load_workbook(r1_score_path).active
 
 # -- Functions -- #
