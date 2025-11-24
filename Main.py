@@ -21,7 +21,7 @@ r1_scores = openpyxl.load_workbook(r1_score_path).active
 
 
 def getDivisionScores(sheet, division: str,
-                      state: str | None = None)-> list[ShtEry]:
+                      state: str | None = None) -> list[ShtEry]:
     """
         Retrieve a list of all scores in a division and state (if providied)
         Used for filtering a spreadsheet provided by CyberPatriot
