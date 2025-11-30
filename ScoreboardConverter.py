@@ -10,7 +10,7 @@
 import openpyxl
 from openpyxl.styles import Alignment, Font, Border, Side
 from openpyxl.drawing.image import Image
-from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.worksheet.dimensions import SheetFormatProperties
 from typing import cast
 
@@ -30,6 +30,9 @@ image_loc = r'TopPictureCyberPatriot.png'
 
 # -- Functions -- #
 
+
+def populate_spreadsheet(workbook: openpyxl.Workbook):
+    ...
 
 def forceSpreadSheetFileExtension(string: str) -> str:
     """
@@ -51,13 +54,12 @@ def createSpreadSheet(sheet_title: str, file_name: str = "untitled.xlsx"):
         Creates a new spreadsheet with the given file_name.
         Styled to be like the CyberPatriot's default sheet.
     """
-    # Ignore all the MemberAccess and Subscript warnings from openpyxl
     # Create a new workbook and set the name to a valid version
     file_name = forceSpreadSheetFileExtension(file_name)
     workbook = openpyxl.Workbook()
 
     # Setting the main spreadsheet sheet to the main one and giving it a title
-    sheet = workbook.active
+    sheet = cast(Worksheet, workbook.active)
     sheet.title = sheet_title
     sheet_prop: SheetFormatProperties = sheet.sheet_format
     sheet_prop.defaultColWidth = 8.43 + 0.72
@@ -114,9 +116,10 @@ def createSpreadSheet(sheet_title: str, file_name: str = "untitled.xlsx"):
 
     # Adding the CyberPatriot image to the top of the spreadsheet
     img = Image(image_loc)
+    # Divide by 1.5 because original image is 1.5x bigger when import -> Excel
     img.width /= 1.5
     img.height /= 1.5
-    img.anchor = 'A1'
+    img.anchor = 'A1'  # Anchor it to the first cell like the original
 
     # Save to the file to ensure every change is reflected in a new file
     sheet.add_image(img)
