@@ -7,11 +7,13 @@
 
 # -- Libraries -- #
 
-import openpyxl
+from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, Border, Side
 from openpyxl.drawing.image import Image
 from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.worksheet.dimensions import SheetFormatProperties
+
+import requests, json
 from typing import cast
 
 # -- Defaults -- #
@@ -26,13 +28,25 @@ thin_black_border = Border(
     bottom=Side(style='thin')
 )
 
+# -- Variables -- #
+
 image_loc = r'TopPictureCyberPatriot.png'
+sb_team_scores = "https://scoreboard.uscyberpatriot.org/api/team/scores.php"
 
 # -- Functions -- #
 
 
-def populate_spreadsheet(workbook: openpyxl.Workbook):
+def populate_spreadsheet():
+# def populate_spreadsheet(workbook: Workbook):
+    """
+        Populates a given spreadsheet with the Score Board data
+    """
+    scores = requests.get(sb_team_scores)
+    with open("whatft.json", "w") as file:
+        json.dump(scores.json(), file, indent=4)
+    # print(scores.json)
     ...
+
 
 def forceSpreadSheetFileExtension(string: str) -> str:
     """
@@ -56,7 +70,7 @@ def createSpreadSheet(sheet_title: str, file_name: str = "untitled.xlsx"):
     """
     # Create a new workbook and set the name to a valid version
     file_name = forceSpreadSheetFileExtension(file_name)
-    workbook = openpyxl.Workbook()
+    workbook = Workbook()
 
     # Setting the main spreadsheet sheet to the main one and giving it a title
     sheet = cast(Worksheet, workbook.active)
@@ -126,5 +140,6 @@ def createSpreadSheet(sheet_title: str, file_name: str = "untitled.xlsx"):
     workbook.save(file_name)
 
 
-createSpreadSheet("wada", "test")
+# createSpreadSheet("wada", "test")
+populate_spreadsheet()
 print("done")
